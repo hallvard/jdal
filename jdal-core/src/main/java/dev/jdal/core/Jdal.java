@@ -1,5 +1,6 @@
 package dev.jdal.core;
 
+import dev.jdal.vsi.Vsi;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +29,7 @@ public final class Jdal {
   }
 
   public static Dataset open(String location, boolean update, Map<String, String> options) {
+    location = Vsi.expandHome(location);
     OpenInfo info = new OpenInfo(location, options);
     for (Driver d : drivers()) {
       boolean ok;
@@ -38,17 +40,26 @@ public final class Jdal {
       }
       if (ok) return d.open(location, update, options);
     }
+    if (info.isPath() && !Vsi.global().exists(location)) {
+      String where =
+          location.startsWith("/") || location.startsWith("/vsi")
+              ? ""
+              : " (relative to " + System.getProperty("user.dir") + ")";
+      throw new JdalException("No such file or directory: " + location + where);
+    }
     throw new JdalException("No driver recognises '" + location + "'");
   }
 
   public static Dataset open(
       String driverName, String location, boolean update, Map<String, String> options) {
+    location = Vsi.expandHome(location);
     return driver(driverName)
         .orElseThrow(() -> new JdalException("Unknown driver " + driverName))
         .open(location, update, options);
   }
 
   public static Dataset create(String driverName, String location, Map<String, String> options) {
+    location = Vsi.expandHome(location);
     Driver d =
         driver(driverName).orElseThrow(() -> new JdalException("Unknown driver " + driverName));
     if (!d.canCreate()) throw new JdalException("Driver " + driverName + " cannot create datasets");
@@ -57,6 +68,7 @@ public final class Jdal {
 
   /** Guesses a writing driver from the file extension. */
   public static Optional<Driver> driverForOutput(String location) {
+    location = Vsi.expandHome(location);
     OpenInfo info = new OpenInfo(location, Map.of());
     String ext = info.extension();
     Optional<Driver> byExtension =

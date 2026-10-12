@@ -68,8 +68,21 @@ public final class Vsi {
 
   // ------------------------------------------------------------------ routing
 
-  /** Maps {@code file:} URIs to plain paths. */
+  /**
+   * A leading {@code ~} (alone, or followed by a slash) is the home directory. A shell does this
+   * for command line arguments, but not in the interactive mode or in paths read from a file.
+   */
+  public static String expandHome(String path) {
+    if (path == null || !path.startsWith("~")) return path;
+    if (path.length() > 1 && path.charAt(1) != '/' && path.charAt(1) != '\\')
+      return path; // ~user: not supported
+    String home = System.getProperty("user.home");
+    return home == null ? path : home + path.substring(1);
+  }
+
+  /** Maps {@code file:} URIs to plain paths and expands a leading {@code ~}. */
   private static String normalize(String path) {
+    path = expandHome(path);
     if (path.startsWith("file:")) {
       try {
         return java.nio.file.Path.of(java.net.URI.create(path)).toString();

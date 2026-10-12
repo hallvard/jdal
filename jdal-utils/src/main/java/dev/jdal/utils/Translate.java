@@ -21,17 +21,17 @@ public final class Translate {
    * Opens {@code source}, writes {@code destination} and returns the number of features written.
    */
   public static long translate(String source, String destination, TranslateOptions options) {
+    final String target = dev.jdal.vsi.Vsi.expandHome(destination);
     try (Dataset src = Jdal.open(source, false, options.openOptions())) {
       Driver driver =
           options.driver() != null
               ? Jdal.driver(options.driver())
                   .orElseThrow(() -> new JdalException("Unknown driver " + options.driver()))
-              : Jdal.driverForOutput(destination)
-                  .orElseThrow(
-                      () -> new JdalException("Cannot guess output format of " + destination));
+              : Jdal.driverForOutput(target)
+                  .orElseThrow(() -> new JdalException("Cannot guess output format of " + target));
       if (!driver.canCreate())
         throw new JdalException("Driver " + driver.name() + " cannot create datasets");
-      try (Dataset dst = driver.create(destination, options.datasetOptions())) {
+      try (Dataset dst = driver.create(target, options.datasetOptions())) {
         return translate(src, dst, options);
       }
     }

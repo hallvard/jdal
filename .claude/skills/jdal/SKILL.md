@@ -31,6 +31,10 @@ With jbang (see `docs/JBANG.md`): `jbang jdal@hallvard/jdal info FILE`, or `jdal
 `jbang app install --name jdal jdal@hallvard/jdal` has been done (from a checkout: `jdal-dev` instead of `jdal`); everything below works the same with `jdal`
 in place of `bin/jdal`.
 
+In the interactive mode there is no shell: a leading `~` is expanded by jdal, but `$HOME`, `*.shp`
+and other shell syntax are not, and relative paths are relative to the directory where jdal was
+started. Quote paths with spaces (`info -s "my data.gpkg"`) or escape the space.
+
 `bin/jdal` with arguments runs that one command and exits (exit code 2 for bad options, 1 for
 failures such as an unreadable file; messages start with `ERROR:`). Without arguments, or with `-i`,
 it opens the interactive mode, where commands are typed without the `jdal` prefix.
@@ -261,7 +265,8 @@ list the class in `META-INF/services/dev.jdal.core.Driver`, and read files throu
 
 | message or symptom | usual cause and fix |
 |---|---|
-| `No driver recognises '...'` | wrong path, or the format has no driver: check `bin/jdal drivers`; for text formats with odd extensions use `CSV:path` |
+| `No such file or directory: ...` | wrong path; the message shows the directory a relative path is relative to (in the interactive mode that is where jdal was started) |
+| `No driver recognises '...'` | the file exists but its format is not recognised or has no driver: check `bin/jdal drivers`; for text formats with odd extensions use `CSV:path` |
 | `Cannot guess output format of ...` | add `-f GPKG` (or another writable driver from `drivers`) |
 | `Driver X cannot create datasets` | the format is read only (WFS, OAPIF, GML) |
 | `Warning: Driver CSV does not support FOO layer creation option` | misspelt option; compare with the table above |
