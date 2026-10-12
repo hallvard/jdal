@@ -1,0 +1,15 @@
+{
+  "catalogs": {},
+  "aliases": {
+    "jdal": {
+      "script-ref": "https://github.com/hallvard/jdal/releases/latest/download/jdal.jar",
+      "description": "jdal: inspect and convert vector geodata (GeoPackage, PostGIS, GeoJSON, shapefile, CSV, GML, WFS, OGC API Features)",
+      "java": "26+"
+    },
+    "jdal-dev": {
+      "script-ref": "jbang/jdal.java",
+      "description": "jdal from a checkout: needs 'mvn install' first (jars from ~/.m2)"
+    }
+  },
+  "templates": {}
+}

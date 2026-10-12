@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>dev.jdal</groupId><artifactId>jdal-parent</artifactId><version>0.1.0-SNAPSHOT</version></parent>
+  <artifactId>jdal-driver-wfs</artifactId>
+  <name>jdal-driver-wfs</name>
+  <description>OGC Web Feature Service client (WFS 1.0, 1.1 and 2.0, read only)</description>
+  <dependencies>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-testkit</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-core</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-http</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-vsi</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-gml</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-filter</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-sql</artifactId><scope>test</scope></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-ops</artifactId><scope>test</scope></dependency>
+  </dependencies>
+</project>

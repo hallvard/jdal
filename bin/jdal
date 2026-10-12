@@ -1,0 +1,14 @@
+#!/bin/bash
+# Runs the jdal command line from a source checkout.
+#   bin/jdal info data.gpkg
+#   bin/jdal            (interactive mode)
+# Build first:  mvn -q package -DskipTests
+set -e
+root="$(cd "$(dirname "$0")/.." && pwd)"
+cpfile="$root/jdal-cli/target/classpath.txt"
+if [ ! -f "$cpfile" ]; then
+  (cd "$root" && mvn -q -pl jdal-cli dependency:build-classpath -Dmdep.outputFile="$cpfile" >/dev/null)
+fi
+# module classes first, so that a stale installed jar never wins
+classes="$(ls -d "$root"/jdal-*/target/classes | tr '\n' ':')"
+exec java --enable-native-access=ALL-UNNAMED -cp "$classes$(cat "$cpfile")" dev.jdal.cli.Main "$@"

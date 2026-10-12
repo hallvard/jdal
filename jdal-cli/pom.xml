@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent><groupId>dev.jdal</groupId><artifactId>jdal-parent</artifactId><version>0.1.0-SNAPSHOT</version></parent>
+  <artifactId>jdal-cli</artifactId>
+  <name>jdal-cli</name>
+  <description>Command line (aesh)</description>
+  <dependencies>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-testkit</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-utils</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-vsi-curl</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-gml</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-ops</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-sql</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-oapif</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-wfs</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-geojson</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-gpkg</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-postgis</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-csv</artifactId></dependency>
+    <dependency><groupId>dev.jdal</groupId><artifactId>jdal-driver-shapefile</artifactId></dependency>
+    <dependency><groupId>org.aesh</groupId><artifactId>aesh</artifactId></dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- one self-contained jar (jdal-cli-VERSION-all.jar) to attach to a release; run it with java -jar or jbang -->
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.6.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals><goal>shade</goal></goals>
+            <configuration>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>all</shadedClassifierName>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                    <exclude>module-info.class</exclude>
+                    <exclude>META-INF/versions/*/module-info.class</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+              <transformers>
+                <!-- the drivers are found with ServiceLoader: merge the META-INF/services files -->
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <mainClass>dev.jdal.cli.Main</mainClass>
+                  <manifestEntries>
+                    <Multi-Release>true</Multi-Release>
+                    <Enable-Native-Access>ALL-UNNAMED</Enable-Native-Access>
+                  </manifestEntries>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

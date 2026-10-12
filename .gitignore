@@ -1,0 +1,8 @@
+target/
+.mvn/target/
+*.class
+.env
+.idea/
+.vscode/
+*.iml
+.DS_Store

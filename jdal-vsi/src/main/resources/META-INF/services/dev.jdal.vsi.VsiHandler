@@ -1,0 +1,6 @@
+dev.jdal.vsi.MemHandler
+dev.jdal.vsi.GzipHandler
+dev.jdal.vsi.SubfileHandler
+dev.jdal.vsi.StdinHandler
+dev.jdal.vsi.StdoutHandler
+dev.jdal.vsi.ZipHandler
